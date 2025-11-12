@@ -1,8 +1,6 @@
 <?php
-
-require __DIR__ . '/includes/DatabaseConnection.php';
-require __DIR__ . '/includes/DatabaseFunction.php';
-
+require __DIR__ . '/../config/DatabaseConnection.php';
+require __DIR__ . '/../helper/DatabaseFunction.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -17,17 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = 'Please enter username';
     } else {
         try {
-            // Tạo user mới
-            if (function_exists('create_user')) {
-                create_user($pdo, ['username' => $username]);
-            } else {
-                insert_row($pdo, 'Users', ['username' => $username]);
-            }
+            create_user($pdo, ['username' => $username]);
             
-            // Set flash message
             $_SESSION['flash'] = 'User "' . htmlspecialchars($username) . '" created successfully!';
             
-            // Redirect về user.php
             header('Location: user.php');
             exit;
             
@@ -37,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
+// --- EDIT USER ---
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -75,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
+// --- DELETE USER ---
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
